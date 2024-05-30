@@ -8,6 +8,8 @@ contract RiToken is ERC20 {
 
     event MintedToken(address indexed receiver, uint256 amount);
     event BurnedToken(address indexed burner, uint256 amount);
+    event TransferredToken(address indexed from, address indexed to, uint256 amount);
+
 
     constructor() ERC20("Rianne Token", "RT") {
         owner = msg.sender;
@@ -29,5 +31,13 @@ contract RiToken is ERC20 {
 
         _burn(msg.sender, _amount);
         emit BurnedToken(msg.sender, _amount);
+    
+    }
+    function transfer(address _to, uint256 _amount) public override returns (bool) {
+        bool success = super.transfer(_to, _amount);
+        if (success) {
+            emit TransferredToken(msg.sender, _to, _amount);
+        }
+        return success;
     }
 }
